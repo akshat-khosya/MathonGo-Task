@@ -1,0 +1,34 @@
+{
+  "name": "mathongo-task",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "deploye": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/akshat-khosya/MathonGo-Task.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/akshat-khosya/MathonGo-Task/issues"
+  },
+  "homepage": "https://github.com/akshat-khosya/MathonGo-Task#readme",
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.20.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.0.1",
+    "express": "^4.18.1",
+    "express-validator": "^6.14.1",
+    "googleapis": "^100.0.0",
+    "mongoose": "^6.3.4",
+    "nodemailer": "^6.7.5",
+    "nodemon": "^2.0.16",
+    "otp-generator": "^4.0.0"
+  }
+}
