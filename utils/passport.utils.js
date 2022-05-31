@@ -38,7 +38,7 @@ module.exports=(passport)=>{
             }
             const newToken=await saveToken(tokenData);
 
-            sendEmail(newUser.email, "verify email", `your auto genrated password is ${otp}`);
+            sendEmail(newUser.email, "Password", `your auto genrated password is ${otp}`);
             return done(null,newUser)
 
         } catch (err) {
