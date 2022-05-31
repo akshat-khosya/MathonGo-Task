@@ -14,6 +14,7 @@ const { sendEmail } = require("../utils/email.utils");
 verifyEmailTemplate = require("../utils/verifyEmailTemplate.utils");
 const jwt = require("jsonwebtoken");
 const { tokenValidTime, resendOtp } = require("../constants/server.constant");
+const HTTPStatus=require("http-status");
 
 exports.newUser = async (req, res) => {
   const errors = validationResult(req);
@@ -112,7 +113,7 @@ exports.verifyEmail = async (req, res) => {
         const duration = durationTime(tokenData.sentTime, dateTime);
         const checkT = checkTime(duration, tokenValidTime);
         if (checkT) {
-          await updateToken({ userId: id }, { verified: true ,token:""});
+          await updateToken({ userId: id }, { verified: true, token: "" });
           return res
             .status(200)
             .json({ msg: "You are sucessfully verified now you can login" });
@@ -140,19 +141,15 @@ exports.resendOtp = async (req, res) => {
       const duration = durationTime(tokenData.sentTime, dateTime);
       const checkT = checkTime(duration, resendOtp);
       if (checkT) {
-        return res
-          .status(401)
-          .json({
-            errors: [
-              {
-                msg: `otp service blocked for ${
-                  (resendOtp - duration) / 60
-                } minutes try again after ${
-                  (resendOtp - duration) / 60
-                } minutes`,
-              },
-            ],
-          });
+        return res.status(401).json({
+          errors: [
+            {
+              msg: `otp service blocked for ${
+                (resendOtp - duration) / 60
+              } minutes try again after ${(resendOtp - duration) / 60} minutes`,
+            },
+          ],
+        });
       }
       const otp = otpGenerator.generate(5, {
         upperCaseAlphabets: false,
@@ -200,21 +197,19 @@ exports.forgotPassword = async (req, res) => {
         );
         return res.status(200).json({ msg: "otp resent succesfully" });
       }
-      return res
-        .status(401)
-        .json({
-          errors: [
-            {
-              msg: tokenData.verified
-                ? `otp service blocked for ${
-                    (resendOtp - duration) / 60
-                  } minutes try again after ${
-                    (resendOtp - duration) / 60
-                  } minutes`
-                : "Invalid Request",
-            },
-          ],
-        });
+      return res.status(401).json({
+        errors: [
+          {
+            msg: tokenData.verified
+              ? `otp service blocked for ${
+                  (resendOtp - duration) / 60
+                } minutes try again after ${
+                  (resendOtp - duration) / 60
+                } minutes`
+              : "Invalid Request",
+          },
+        ],
+      });
     }
     return res.status(401).json({ errors: [{ msg: "Invalid Request" }] });
   } catch (err) {
@@ -230,17 +225,17 @@ exports.updatePassword = async (req, res) => {
     const checkUser = await getUser({ _id: id });
     if (checkUser) {
       const tokenData = await getToken({ userId: id });
-      if(tokenData.verified){
-        if(tokenData.token===otp){
+      if (tokenData.verified) {
+        if (tokenData.token === otp) {
           const dateTime = getDate();
           const duration = durationTime(tokenData.sentTime, dateTime);
           const checkT = checkTime(duration, tokenValidTime);
           if (checkT) {
             const salt = await bcrypt.genSalt(10);
             const hasedPass = await bcrypt.hash(req.body.password, salt);
-            
-            updateUser({email:checkUser.email},{password:hasedPass});
-            updateToken({userId:tokenData.userId},{token:""});
+
+            updateUser({ email: checkUser.email }, { password: hasedPass });
+            updateToken({ userId: tokenData.userId }, { token: "" });
             return res.status(200).json({ msg: "Password reset succesfully" });
           }
           return res.status(401).json({ errors: [{ msg: "Token expired" }] });
@@ -256,7 +251,7 @@ exports.updatePassword = async (req, res) => {
   }
 };
 
-exports.autoLogin=async(req,res)=>{
+exports.autoLogin = async (req, res) => {
   try {
     const checkUser = await getUser({ _id: req.user });
     const { password, ...others } = checkUser._doc;
@@ -268,4 +263,13 @@ exports.autoLogin=async(req,res)=>{
     console.log(err);
     return res.status(500).json({ errors: [{ msg: "server error" }] });
   }
+};
+
+exports.googleSignup=async(req,res,next)=>{
+  
+  const {password,...others}=req.user._doc;
+  console.log(others);
+  return res.status(200).json({msg:"Login sucessfully",userData:others});
+
+
 }

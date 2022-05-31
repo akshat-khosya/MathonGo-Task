@@ -24,12 +24,18 @@
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
     "express": "^4.18.1",
+    "express-session": "^1.17.3",
     "express-validator": "^6.14.1",
     "googleapis": "^100.0.0",
+    "http-status": "^1.5.2",
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.3.4",
     "nodemailer": "^6.7.5",
     "nodemon": "^2.0.16",
-    "otp-generator": "^4.0.0"
+    "otp-generator": "^4.0.0",
+    "passport": "^0.6.0",
+    "passport-google-oauth": "^2.0.0",
+    "passport-google-oauth2": "^0.2.0",
+    "passport-google-plus-token": "^2.1.0"
   }
 }
