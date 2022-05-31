@@ -16,12 +16,19 @@ exports.saveUser=async(query)=>{
         const user=new User(query);
         const newUser=await user.save();
         return newUser;
-    } catch (error) {
-        console.log(error);
+    } catch (err) {
+        console.log(err);
         throw Error('Error while createing new User');
     }
 }
-
+exports.updateUser=async(find,query)=>{
+    try {
+        const user=await User.updateOne(find,{$set:query});
+    } catch (err) {
+        console.log(err);
+        throw Error('Error while updating User');
+    }
+}
 exports.saveToken=async(query)=>{
     try {
         const token=new Token(query);
@@ -30,5 +37,24 @@ exports.saveToken=async(query)=>{
     } catch (error) {
         console.log(error);
         throw Error('Error while createing new token');
+    }
+}
+
+exports.getToken=async(query)=>{
+    try {
+        const token=await Token.findOne(query);
+        return token;
+    } catch (err) {
+        console.log(err);
+        throw Error('Error while finding Token');
+    }
+}
+
+exports.updateToken=async(find,query)=>{
+    try {
+        const token=await Token.updateOne(find,{$set:query});
+    } catch (err) {
+        console.log(err);
+        throw Error('Error while updating Token');
     }
 }
